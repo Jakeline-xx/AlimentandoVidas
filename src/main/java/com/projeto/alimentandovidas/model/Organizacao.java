@@ -21,9 +21,19 @@ import java.util.List;
 public class Organizacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_organizacao")
-    private Long idOrganizacao;
+    @Column(name = "id")
+    private Long id;
 
+    @OneToMany(mappedBy = "organizacao")
+    @Fetch(FetchMode.JOIN)
+    @Column(name = "acao_social")
+    private List<AcaoSocial> acaoSocialList;
+
+    @Column(name = "status")
+    private String status;
+
+    //TODO AO REALIZAR UM PUT, VALIDAR SE O CNPJ DO ID RECEBIDO É O MESMO DO CNPJ RECEBIDO PELO FRONT
+    @NotEmpty(message = "O campo cnpj é obrigatório")
     @Column(name = "cnpj")
     private String cnpj;
 
@@ -62,10 +72,6 @@ public class Organizacao {
     @Column(name = "chave_pix")
     private String chavePix;
 
-    @OneToMany(mappedBy = "organizacao")
-    @Fetch(FetchMode.JOIN)
-    @Column(name = "acao_social")
-    private List<AcaoSocial> acaoSocialList;
 
     @Column(name = "data_cadastro")
     private LocalDateTime dataCadastro;

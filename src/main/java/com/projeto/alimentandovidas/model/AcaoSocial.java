@@ -11,8 +11,13 @@ import java.time.LocalDateTime;
 public class AcaoSocial {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_acao_social")
-    private Long idAcaoSocial;
+    @Column(name = "id")
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    @Fetch(FetchMode.JOIN)
+    private Organizacao organizacao;
 
     @NotEmpty(message = "O campo descricao é obrigatório")
     @Column(name = "descricao_completa")
@@ -37,11 +42,6 @@ public class AcaoSocial {
     @NotEmpty(message = "é necessário informar o público permitido")
     @Column(name = "publicoPermitido")
     private String publicoPermitido;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organizacao_id")
-    @Fetch(FetchMode.JOIN)
-    private Organizacao organizacao;
 
     @Column(name = "data_cadastro")
     private LocalDateTime dataCadastro;
