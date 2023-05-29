@@ -22,6 +22,10 @@ public class AcaoSocial {
     @Column(name = "local")
     private String local;
 
+    @NotEmpty(message = "O campo horário de funcionamento é obrigatório")
+    @Column(name = "horario_funcionamento")
+    private String horarioFuncionamento;
+
     @NotEmpty(message = "O campo data inicio é obrigatório")
     @Column(name = "data_inicio")
     private LocalDateTime dataInicio;
