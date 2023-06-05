@@ -1,7 +1,9 @@
 package com.projeto.alimentandovidas.controller;
 
 import com.projeto.alimentandovidas.exception.RestNotFoundException;
+import com.projeto.alimentandovidas.model.AcaoSocial;
 import com.projeto.alimentandovidas.model.Organizacao;
+import com.projeto.alimentandovidas.repository.AcaoSocialRepository;
 import com.projeto.alimentandovidas.repository.OrganizacaoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+import java.time.LocalDateTime;
+
 @RestController
 @Slf4j
 @RequestMapping("/alimentandovidas/api/organizacao")
@@ -29,20 +33,42 @@ public class OrganizacaoController {
     OrganizacaoRepository organizacaoRepository;
 
     @Autowired
-    PagedResourcesAssembler<Object> assembler;
+    AcaoSocialRepository acaoSocialRepository;
+
+    @Autowired
+    PagedResourcesAssembler<AcaoSocial> assembler;
 
     @GetMapping
     @Operation(
             summary = "Lista de organizações",
-            description = "Retorna uma lista paginada de organizações com mesmo estado"
+            description = "Retorna uma lista paginada de todas organizações, ou apenas com mesmo estado"
     )
-    public PagedModel<EntityModel<Object>> index(@RequestParam(required = false) String estado, @ParameterObject @PageableDefault(size = 5) Pageable pageable){
+    public PagedModel<EntityModel<AcaoSocial>> indexOrganizacoes(@RequestParam(required = false) String estado, @ParameterObject @PageableDefault(size = 5) Pageable pageable){
         Page<Organizacao> organizacoes = (estado == null)?
                 organizacaoRepository.findAll(pageable):
                 organizacaoRepository.findByEstadoContaining(estado, pageable);
 
         return assembler.toModel(organizacoes.map(Organizacao::toModel));
     }
+
+    @GetMapping
+    @Operation(
+            summary = "Lista de ações sociais",
+            description = "Retorna uma lista paginada de todas ações sociais, ou de ações sociais de uma organização específica"
+    )
+    public PagedModel<EntityModel<AcaoSocial>> indexAcoesSociais(
+            @RequestParam(required = false) Long idOrganizacao,
+            @PageableDefault(size = 5) Pageable pageable
+    ) {
+        Page<AcaoSocial> acoesSociais = (idOrganizacao == null)?
+                acaoSocialRepository.findAll(pageable):
+                organizacaoRepository.findById(idOrganizacao)
+                        .map(organizacao -> acaoSocialRepository.findByOrganizacao(organizacao, pageable))
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Organização não encontrada"));
+
+        return assembler.toModel(acoesSociais.map(AcaoSocial::toModel));
+    }
+
 
     @GetMapping("{id}")
     @Operation(
@@ -69,6 +95,7 @@ public class OrganizacaoController {
     public ResponseEntity<Object> create(@RequestBody @Valid Organizacao organizacao){
         log.info("realizando cadastro da organizacao: " + organizacao);
         organizacao.setStatus("ATIVO");
+        organizacao.setDataCadastro(LocalDateTime.now());
         organizacaoRepository.save(organizacao);
         return ResponseEntity
                 .created(organizacao.toModel().getRequiredLink("self").toUri())
@@ -82,13 +109,19 @@ public class OrganizacaoController {
     )
     public EntityModel<Organizacao> update(@PathVariable Long id, @RequestBody @Valid Organizacao organizacao){
         log.info("alterando organizacao com id " + id);
-        organizacaoRepository.findById(id)
+        Organizacao organizacaoExistente = organizacaoRepository.findById(id)
                 .orElseThrow(() -> new RestNotFoundException("organizacao não encontrada"));
 
+        if (!organizacaoExistente.getCnpj().equals(organizacao.getCnpj())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O CNPJ não pode ser alterado");
+        }
+
         organizacao.setStatus("ATIVO");
+        organizacao.setDataCadastro(organizacaoExistente.getDataCadastro());
         organizacao.setId(id);
         organizacaoRepository.save(organizacao);
 
         return organizacao.toModel();
     }
 }
+

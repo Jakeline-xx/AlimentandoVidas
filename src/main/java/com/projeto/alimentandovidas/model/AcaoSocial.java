@@ -2,12 +2,21 @@ package com.projeto.alimentandovidas.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
 
+@Data
+@NoArgsConstructor
 @Entity
+@AllArgsConstructor
+@Builder
+@Table(name = "acao_social")
 public class AcaoSocial {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
