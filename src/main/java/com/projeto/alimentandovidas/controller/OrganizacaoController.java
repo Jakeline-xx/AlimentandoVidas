@@ -35,41 +35,6 @@ public class OrganizacaoController {
     @Autowired
     AcaoSocialRepository acaoSocialRepository;
 
-    @Autowired
-    PagedResourcesAssembler<AcaoSocial> assembler;
-
-    @GetMapping
-    @Operation(
-            summary = "Lista de organizações",
-            description = "Retorna uma lista paginada de todas organizações, ou apenas com mesmo estado"
-    )
-    public PagedModel<EntityModel<AcaoSocial>> indexOrganizacoes(@RequestParam(required = false) String estado, @ParameterObject @PageableDefault(size = 5) Pageable pageable){
-        Page<Organizacao> organizacoes = (estado == null)?
-                organizacaoRepository.findAll(pageable):
-                organizacaoRepository.findByEstadoContaining(estado, pageable);
-
-        return assembler.toModel(organizacoes.map(Organizacao::toModel));
-    }
-
-    @GetMapping
-    @Operation(
-            summary = "Lista de ações sociais",
-            description = "Retorna uma lista paginada de todas ações sociais, ou de ações sociais de uma organização específica"
-    )
-    public PagedModel<EntityModel<AcaoSocial>> indexAcoesSociais(
-            @RequestParam(required = false) Long idOrganizacao,
-            @PageableDefault(size = 5) Pageable pageable
-    ) {
-        Page<AcaoSocial> acoesSociais = (idOrganizacao == null)?
-                acaoSocialRepository.findAll(pageable):
-                organizacaoRepository.findById(idOrganizacao)
-                        .map(organizacao -> acaoSocialRepository.findByOrganizacao(organizacao, pageable))
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Organização não encontrada"));
-
-        return assembler.toModel(acoesSociais.map(AcaoSocial::toModel));
-    }
-
-
     @GetMapping("{id}")
     @Operation(
             summary = "Detalhes da organização",

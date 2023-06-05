@@ -9,9 +9,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +36,37 @@ public class AcaoSocialController {
 
     @Autowired
     PagedResourcesAssembler<Object> assembler;
+
+    @GetMapping("organizacoes")
+    @Operation(
+            summary = "Lista de organizações",
+            description = "Retorna uma lista paginada de todas organizações, ou apenas com mesmo estado"
+    )
+    public PagedModel<EntityModel<Object>> indexOrganizacoes(@RequestParam(required = false) String estado, @ParameterObject @PageableDefault(size = 5) Pageable pageable){
+        Page<Organizacao> organizacoes = (estado == null)?
+                organizacaoRepository.findAll(pageable):
+                organizacaoRepository.findByEstadoContaining(estado, pageable);
+
+        return assembler.toModel(organizacoes.map(Organizacao::toModel));
+    }
+
+    @GetMapping("acoes-sociais")
+    @Operation(
+            summary = "Lista de ações sociais",
+            description = "Retorna uma lista paginada de todas ações sociais, ou de ações sociais de uma organização específica"
+    )
+    public PagedModel<EntityModel<Object>> indexAcoesSociais(
+            @RequestParam(required = false) Long idOrganizacao,
+            @PageableDefault(size = 5) Pageable pageable
+    ) {
+        Page<AcaoSocial> acoesSociais = (idOrganizacao == null)?
+                acaoSocialRepository.findAll(pageable):
+                organizacaoRepository.findById(idOrganizacao)
+                        .map(organizacao -> acaoSocialRepository.findByOrganizacao(organizacao, pageable))
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Organização não encontrada"));
+
+        return assembler.toModel(acoesSociais.map(AcaoSocial::toModel));
+    }
 
     @GetMapping("{id}")
     @Operation(

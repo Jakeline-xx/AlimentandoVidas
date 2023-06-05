@@ -1,5 +1,7 @@
 package com.projeto.alimentandovidas.model;
 
+import com.projeto.alimentandovidas.controller.AcaoSocialController;
+import com.projeto.alimentandovidas.controller.OrganizacaoController;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -8,8 +10,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
 
 import java.time.LocalDateTime;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Data
 @NoArgsConstructor
@@ -54,4 +61,13 @@ public class AcaoSocial {
 
     @Column(name = "data_cadastro")
     private LocalDateTime dataCadastro;
+
+    public EntityModel<AcaoSocial> toModel() {
+        return EntityModel.of(
+                this,
+                linkTo(methodOn(AcaoSocialController.class).show(id)).withSelfRel(),
+                linkTo(methodOn(AcaoSocialController.class).destroy(id)).withRel("delete"),
+                linkTo(methodOn(AcaoSocialController.class).indexAcoesSociais(id, Pageable.unpaged())).withRel("acoesSociais")
+        );
+    }
 }
