@@ -59,9 +59,6 @@ public class Organizacao {
 //    @Column(name = "senha")
 //    private String senha;
 
-//    @Column(name = "logo")
-//    private String logoCaminho;
-
     @NotEmpty(message = "O campo descricao é obrigatório")
     @Column(name = "descricao")
     private String descricao;
