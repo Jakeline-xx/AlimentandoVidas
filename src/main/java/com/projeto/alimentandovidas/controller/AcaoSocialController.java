@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.api.annotations.ParameterObject;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -81,6 +81,8 @@ public class AcaoSocialController {
         return acaoSocial.toModel();
     }
 
+
+    //TODO POSSO PENSAR EM RECEBER APENAS O ID E DEIXAR ORGANIZAÇÃO NULL VINDO DO FRONT, PRA VALIDAR PELO ID
     @PostMapping
     @Operation(
             summary = "Cadastro de ação social",

@@ -31,7 +31,7 @@ public class AcaoSocial {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "organizacao_id", referencedColumnName = "id")
     @Fetch(FetchMode.JOIN)
     private Organizacao organizacao;
 
