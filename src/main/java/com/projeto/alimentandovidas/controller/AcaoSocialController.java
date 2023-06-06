@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -50,23 +52,20 @@ public class AcaoSocialController {
         return assembler.toModel(organizacoes.map(Organizacao::toModel));
     }
 
-    @GetMapping("acoes-sociais")
+    @GetMapping("acoes-sociais/{id}")
     @Operation(
-            summary = "Lista de ações sociais",
-            description = "Retorna uma lista paginada de todas ações sociais, ou de ações sociais de uma organização específica"
+            summary = "Lista de ações sociais de uma organização",
+            description = "Retorna todas as ações sociais de uma organização específica"
     )
-    public PagedModel<EntityModel<Object>> indexAcoesSociais(
-            @RequestParam(required = false) Long idOrganizacao,
-            @PageableDefault(size = 5) Pageable pageable
-    ) {
-        Page<AcaoSocial> acoesSociais = (idOrganizacao == null)?
-                acaoSocialRepository.findAll(pageable):
-                organizacaoRepository.findById(idOrganizacao)
-                        .map(organizacao -> acaoSocialRepository.findByOrganizacao(organizacao, pageable))
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Organização não encontrada"));
+    public List<AcaoSocial> indexAcoesSociais(@PathVariable Long id) {
+        Organizacao organizacao = organizacaoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Organização não encontrada"));
 
-        return assembler.toModel(acoesSociais.map(AcaoSocial::toModel));
+        List<AcaoSocial> acoesSociais = acaoSocialRepository.findByOrganizacaoId(id);
+
+        return acoesSociais;
     }
+
 
     @GetMapping("{id}")
     @Operation(

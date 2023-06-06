@@ -4,6 +4,7 @@ import com.projeto.alimentandovidas.controller.AcaoSocialController;
 import com.projeto.alimentandovidas.controller.OrganizacaoController;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import org.hibernate.annotations.FetchMode;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -47,13 +49,12 @@ public class AcaoSocial {
     @Column(name = "horario_funcionamento")
     private String horarioFuncionamento;
 
-    @NotEmpty(message = "O campo data inicio é obrigatório")
     @Column(name = "data_inicio")
-    private LocalDateTime dataInicio;
+    private LocalDate dataInicio;
 
-    @NotEmpty(message = "O campo data fim é obrigatório")
+    @NotNull(message = "O campo data fim é obrigatório")
     @Column(name = "data_fim")
-    private LocalDateTime dataFim;
+    private LocalDate dataFim;
 
     @NotEmpty(message = "é necessário informar o público permitido")
     @Column(name = "publicoPermitido")
@@ -67,7 +68,7 @@ public class AcaoSocial {
                 this,
                 linkTo(methodOn(AcaoSocialController.class).show(id)).withSelfRel(),
                 linkTo(methodOn(AcaoSocialController.class).destroy(id)).withRel("delete"),
-                linkTo(methodOn(AcaoSocialController.class).indexAcoesSociais(id, Pageable.unpaged())).withRel("acoesSociais")
+                linkTo(methodOn(AcaoSocialController.class).indexAcoesSociais(id)).withRel("acoesSociais")
         );
     }
 }
