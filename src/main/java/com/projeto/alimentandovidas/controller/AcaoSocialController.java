@@ -80,8 +80,6 @@ public class AcaoSocialController {
         return acaoSocial.toModel();
     }
 
-
-    //TODO POSSO PENSAR EM RECEBER APENAS O ID E DEIXAR ORGANIZAÇÃO NULL VINDO DO FRONT, PRA VALIDAR PELO ID
     @PostMapping
     @Operation(
             summary = "Cadastro de ação social",
