@@ -9,14 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +18,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
-@RequestMapping("/alimentandovidas/api/acao-social")
+@RequestMapping("/alimentandovidas/api")
 public class AcaoSocialController {
     @Autowired
     AcaoSocialRepository acaoSocialRepository;
@@ -36,23 +29,7 @@ public class AcaoSocialController {
     @Autowired
     OrganizacaoRepository organizacaoRepository;
 
-    @Autowired
-    PagedResourcesAssembler<Object> assembler;
-
-    @GetMapping("organizacoes")
-    @Operation(
-            summary = "Lista de organizações",
-            description = "Retorna uma lista paginada de todas organizações, ou apenas com mesmo estado"
-    )
-    public PagedModel<EntityModel<Object>> indexOrganizacoes(@RequestParam(required = false) String estado, @ParameterObject @PageableDefault(size = 5) Pageable pageable){
-        Page<Organizacao> organizacoes = (estado == null)?
-                organizacaoRepository.findAll(pageable):
-                organizacaoRepository.findByEstadoContaining(estado, pageable);
-
-        return assembler.toModel(organizacoes.map(Organizacao::toModel));
-    }
-
-    @GetMapping("acoes-sociais/{id}")
+    @GetMapping("/acoes-sociais/{id}")
     @Operation(
             summary = "Lista de ações sociais de uma organização",
             description = "Retorna todas as ações sociais de uma organização específica"
@@ -67,7 +44,7 @@ public class AcaoSocialController {
     }
 
 
-    @GetMapping("{id}")
+    @GetMapping("/acao-social/{id}")
     @Operation(
             summary = "Detalhes da ação social",
             description = "Retorna os dados de uma ação social com o ID especificado"
@@ -80,7 +57,7 @@ public class AcaoSocialController {
         return acaoSocial.toModel();
     }
 
-    @PostMapping
+    @PostMapping("/cadastrar-acao")
     @Operation(
             summary = "Cadastro de ação social",
             description = "Realiza o cadastro de uma nova ação social"
@@ -104,7 +81,7 @@ public class AcaoSocialController {
                 .body(acaoSocial.toModel());
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/atualizar-acao/{id}")
     @Operation(
             summary = "Atualização da ação social",
             description = "Atualiza os dados de uma ação social com o Id especificado"
@@ -122,7 +99,7 @@ public class AcaoSocialController {
         return acaoSocial.toModel();
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("deletar-acao/{id}")
     @Operation(
             summary = "Exclusão da ação social",
             description = "Exclui uma ação social com o Id especificado"

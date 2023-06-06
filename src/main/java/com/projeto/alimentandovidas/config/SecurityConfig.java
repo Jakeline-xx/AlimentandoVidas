@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @Configuration
 public class SecurityConfig {
 
@@ -25,6 +26,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/api/registrar").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
+                .requestMatchers(HttpMethod.GET, "/organizacao/{id}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/organizacoes").permitAll()
+                .requestMatchers(HttpMethod.GET, "/acoes-sociais/{id}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/acao-social/{id}").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**" ).permitAll()
                 .anyRequest().authenticated()
                 .and()

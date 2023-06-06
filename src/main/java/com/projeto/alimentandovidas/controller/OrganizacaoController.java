@@ -8,8 +8,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +26,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @Slf4j
-@RequestMapping("/alimentandovidas/api/organizacao")
+@RequestMapping("/alimentandovidas/api/")
 public class OrganizacaoController {
     @Autowired
     OrganizacaoRepository organizacaoRepository;
@@ -28,7 +34,23 @@ public class OrganizacaoController {
     @Autowired
     AcaoSocialRepository acaoSocialRepository;
 
-    @GetMapping("{id}")
+    @Autowired
+    PagedResourcesAssembler<Object> assembler;
+
+    @GetMapping("/organizacoes")
+    @Operation(
+            summary = "Lista de organizações",
+            description = "Retorna uma lista paginada de todas organizações, ou apenas com mesmo estado"
+    )
+    public PagedModel<EntityModel<Object>> indexOrganizacoes(@RequestParam(required = false) String estado, @ParameterObject @PageableDefault(size = 5) Pageable pageable){
+        Page<Organizacao> organizacoes = (estado == null)?
+                organizacaoRepository.findAll(pageable):
+                organizacaoRepository.findByEstadoContaining(estado, pageable);
+
+        return assembler.toModel(organizacoes.map(Organizacao::toModel));
+    }
+
+    @GetMapping("/organizacao/{id}")
     @Operation(
             summary = "Detalhes da organização",
             description = "Retorna os dados de uma organização com o Id especificado"
@@ -41,7 +63,7 @@ public class OrganizacaoController {
         return organizacao.toModel();
     }
 
-    @PostMapping
+    @PostMapping("/cadastrar")
     @Operation(
             summary = "Cadastro de organização",
             description = "Realiza o cadastro de uma nova organização"
@@ -60,7 +82,7 @@ public class OrganizacaoController {
                 .body(organizacao.toModel());
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/atualizar/{id}")
     @Operation(
             summary = "Atualização da organização",
             description = "Atualiza os dados de uma organização com o ID especificado"

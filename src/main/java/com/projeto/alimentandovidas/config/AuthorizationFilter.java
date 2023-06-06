@@ -25,17 +25,14 @@ public class AuthorizationFilter extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // pegar o token no header
         var token = getToken(request);
 
-        // se for valido, autenticar
         if (token != null){
             var usuario = tokenService.valideAndGetUserBy(token);
             Authentication auth = new UsernamePasswordAuthenticationToken(usuario.getEmail(), null, usuario.getAuthorities() );
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
-        //chama o próximo
         filterChain.doFilter(request, response);
     }
 

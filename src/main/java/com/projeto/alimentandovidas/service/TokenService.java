@@ -28,7 +28,7 @@ public class TokenService {
         var token = JWT.create()
                 .withSubject(credencial.email())
                 .withExpiresAt(Instant.now().plus(1, ChronoUnit.HOURS))
-                .withIssuer("PiggyBank")
+                .withIssuer("AlimentandoVidas")
                 .sign(alg);
 
         return new Token(token, "JWT", "Bearer");
@@ -37,7 +37,7 @@ public class TokenService {
     public Usuario valideAndGetUserBy(String token) {
         Algorithm alg = Algorithm.HMAC256(secret);
         var email =  JWT.require(alg)
-                .withIssuer("PiggyBank")
+                .withIssuer("AlimentandoVidas")
                 .build()
                 .verify(token)
                 .getSubject()
