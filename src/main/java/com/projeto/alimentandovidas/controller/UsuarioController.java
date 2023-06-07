@@ -5,6 +5,8 @@ import com.projeto.alimentandovidas.model.Usuario;
 import com.projeto.alimentandovidas.repository.UsuarioRepository;
 import com.projeto.alimentandovidas.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +40,10 @@ public class UsuarioController {
             summary = "Registro de usuário",
             description = "Faz o registro do usuário para que possa acessar endpoints restritos"
     )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "organizacao cadastrada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro na validação dos dados da requisição")
+    })
     public ResponseEntity<Usuario> registrar(@RequestBody @Valid Usuario usuario){
         usuario.setSenha(encoder.encode(usuario.getSenha()));
         repository.save(usuario);
@@ -51,6 +57,10 @@ public class UsuarioController {
             summary = "Login de usuario",
             description = "Realiza o login do usuário após registro"
     )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "login realizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro na validação dos dados da requisição")
+    })
     public ResponseEntity<Object> login(@RequestBody @Valid Credencial credencial){
         manager.authenticate(credencial.toAuthentication());
         var token = tokenService.generateToken(credencial);

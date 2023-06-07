@@ -19,7 +19,7 @@ public class DocumentationConfig {
                 .info(new Info()
                         .title("Alimentando Vidas API")
                         .description("Uma API para o sistema que reúne organizações e suas ações sociais.")
-                        .summary("Essa api server para......")
+                        .summary("Essa api serve para......")
                         .version("V1")
                         .contact(new Contact()
                                 .name("Jakeline Santana")

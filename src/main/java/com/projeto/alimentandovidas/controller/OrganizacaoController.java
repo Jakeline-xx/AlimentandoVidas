@@ -6,6 +6,7 @@ import com.projeto.alimentandovidas.repository.AcaoSocialRepository;
 import com.projeto.alimentandovidas.repository.OrganizacaoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
@@ -27,6 +28,7 @@ import java.time.LocalDateTime;
 @RestController
 @Slf4j
 @RequestMapping("/alimentandovidas/api/")
+@SecurityRequirement(name = "bearer-key")
 public class OrganizacaoController {
     @Autowired
     OrganizacaoRepository organizacaoRepository;
