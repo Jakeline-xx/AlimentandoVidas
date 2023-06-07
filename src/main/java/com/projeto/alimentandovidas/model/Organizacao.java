@@ -58,11 +58,6 @@ public class Organizacao {
     @Column(name = "telefone")
     private String telefone;
 
-//    @Column(name = "email")
-//    private String email;
-//
-//    @Column(name = "senha")
-//    private String senha;
 
     @NotEmpty(message = "O campo descricao é obrigatório")
     @Column(name = "descricao")

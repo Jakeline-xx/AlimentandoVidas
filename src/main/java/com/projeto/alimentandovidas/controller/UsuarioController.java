@@ -4,6 +4,7 @@ import com.projeto.alimentandovidas.model.Credencial;
 import com.projeto.alimentandovidas.model.Usuario;
 import com.projeto.alimentandovidas.repository.UsuarioRepository;
 import com.projeto.alimentandovidas.service.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,10 @@ public class UsuarioController {
     TokenService tokenService;
 
     @PostMapping("/api/registrar")
+    @Operation(
+            summary = "Registro de usuário",
+            description = "Faz o registro do usuário para que possa acessar endpoints restritos"
+    )
     public ResponseEntity<Usuario> registrar(@RequestBody @Valid Usuario usuario){
         usuario.setSenha(encoder.encode(usuario.getSenha()));
         repository.save(usuario);
@@ -42,6 +47,10 @@ public class UsuarioController {
     }
 
     @PostMapping("/api/login")
+    @Operation(
+            summary = "Login de usuario",
+            description = "Realiza o login do usuário após registro"
+    )
     public ResponseEntity<Object> login(@RequestBody @Valid Credencial credencial){
         manager.authenticate(credencial.toAuthentication());
         var token = tokenService.generateToken(credencial);
