@@ -47,4 +47,6 @@ Para testar os recursos JSON e endpoints da API Alimentando Vidas, utilize o swa
 
 ### Lista de endpoints
 
+![endpoints]([URL_da_imagem](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/endpoints.png?raw=true))
+
 
