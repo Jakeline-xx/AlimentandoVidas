@@ -44,9 +44,23 @@ Para instalar e executar a API Alimentando Vidas localmente, siga os passos abai
 
 ### Procedimento de Testes
 Para testar os recursos JSON e endpoints da API Alimentando Vidas, utilize o swagger através do http://localhost:8080/swagger-ui/index.html#/ para enviar requisições HTTP para a API.
-
+A persistência de dados pode ser visualizada através do banco em memória (h2) acessando http://localhost:8080/h2 e fazendo o login com as credenciais do arquivo properties.
 ### Lista de endpoints
 
 ![endpoints](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/endpoints.png?raw=true)
+
+### Autenticação 
+
+Alguns endpoints necessitam de autenticação para obter acesso. Para isso, faça primeiro o registro e depois faça o login para gerar o token jwt. Para deixar o token fixado no header, vá no botão Authoriza e insira o token gerado, conforme passo a passo abaixo:
+
+![endpoints](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/endpoints.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/autenticacao.png?raw=true)
+
+Exemplo de requisição que necessita de autenticação.
+
+Sem autenticar:
+![endpoints](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/endpoints.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/autenticacao.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/nok.png?raw=true)
+
+Autenticado e persistindo os dados:
+![endpoints](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/endpoints.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/autenticacao.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/ok.png?raw=true)
 
 
