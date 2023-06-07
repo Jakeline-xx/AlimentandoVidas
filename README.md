@@ -53,14 +53,14 @@ A persistência de dados pode ser visualizada através do banco em memória (h2)
 
 Alguns endpoints necessitam de autenticação para obter acesso. Para isso, faça primeiro o registro e depois faça o login para gerar o token jwt. Para deixar o token fixado no header, vá no botão Authoriza e insira o token gerado, conforme passo a passo abaixo:
 
-![endpoints](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/endpoints.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/autenticacao.png?raw=true)
+![autenticacao](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/endpoints.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/autenticacao.png?raw=true)
 
 Exemplo de requisição que necessita de autenticação.
 
 Sem autenticar:
-![endpoints](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/endpoints.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/autenticacao.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/nok.png?raw=true)
+![nok](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/endpoints.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/autenticacao.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/nok.png?raw=true)
 
 Autenticado e persistindo os dados:
-![endpoints](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/endpoints.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/autenticacao.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/ok.png?raw=true)
+![ok](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/endpoints.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/autenticacao.png?raw=true](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/ok.png?raw=true)
 
-
+# Atenção: o Token possui um tempo de expiração! quando expirado, gerar token novamente através do login.
