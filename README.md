@@ -18,7 +18,6 @@ Com a API Alimentando Vidas, é possível visualizar informações detalhadas so
 Além de beneficiar as pessoas que precisam de ajuda, a API Alimentando Vidas também beneficia as próprias organizações. Por meio dessa plataforma, as organizações têm a oportunidade de divulgar suas ações sociais e formas de arrecadar dinheiro, como por meio do Pix. Com maior visibilidade, as organizações podem atrair mais doações e, assim, ampliar sua capacidade de ajudar aqueles que mais necessitam.
 
 <br>
-<br>
 
 # API - Parte técnica 
 <br>
@@ -36,7 +35,7 @@ A API utiliza o padrão REST (Representational State Transfer) para a comunicaç
 ### Procedimento de Instalação
 Para instalar e executar a API Alimentando Vidas localmente, siga os passos abaixo:
 
-- Certifique-se de ter o Java Development Kit (JDK) e o Maven instalado em sua máquina. A versão recomendada para JDK é a JDK 11 ou superior.
+- Certifique-se de ter o Java Development Kit (JDK) e o Maven instalado em sua máquina. A versão recomendada para JDK é a JDK 17.
 - Faça o clone do repositório aqui no github.
 - Navegue até o diretório clonado por meio do terminal ou prompt de comando.
 - Compile o projeto executando o seguinte comando: ./mvnw clean install.
@@ -44,14 +43,14 @@ Para instalar e executar a API Alimentando Vidas localmente, siga os passos abai
 
 ### Procedimento de Testes
 Para testar os recursos JSON e endpoints da API Alimentando Vidas, utilize o swagger através do http://localhost:8080/swagger-ui/index.html#/ para enviar requisições HTTP para a API.
-A persistência de dados pode ser visualizada através do banco em memória (h2) acessando http://localhost:8080/h2 e fazendo o login com as credenciais do arquivo properties.
+A persistência de dados pode ser visualizadas através do banco em memória (h2) acessando http://localhost:8080/h2 e fazendo o login com as credenciais do arquivo properties.
 ### Lista de endpoints
 
 ![endpoints](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/endpoints.png?raw=true)
 
 ### Autenticação 
 
-Alguns endpoints necessitam de autenticação para obter acesso. Para isso, faça primeiro o registro e depois faça o login para gerar o token jwt. Para deixar o token fixado no header, vá no botão Authoriza e insira o token gerado, conforme passo a passo abaixo:
+Alguns endpoints necessitam de autenticação para obter acesso. Para isso, faça primeiro o registro e depois faça o login para gerar o token jwt. Para deixar o token fixado no header, vá no botão Authorize e insira o token gerado, conforme passo a passo abaixo:
 
 ![autenticacao](https://github.com/Jakeline-xx/AlimentandoVidas/blob/main/autenticacao.png?raw=true)
 
